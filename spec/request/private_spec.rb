@@ -16,7 +16,7 @@ RSpec.describe "Posts wtih atuthentication", type: :request do
           before { get "/posts/#{other_user_post.id}", headers: auth_headers}
 
           context "payload" do
-            subject { JSON.parse(response.body) }
+            subject { payload }
             it { is_expected.to include(:id) }
           end
           context "response" do
@@ -30,7 +30,7 @@ RSpec.describe "Posts wtih atuthentication", type: :request do
         before { get "/posts/#{other_user_post_draft.id}", headers: auth_headers}
 
         context "payload" do
-          subject { JSON.parse(response.body) }
+          subject { payload }
           it { is_expected.to include(:error) }
         end
         context "response" do
@@ -51,10 +51,8 @@ RSpec.describe "Posts wtih atuthentication", type: :request do
   describe "GET /posts" do
 
   end
-  it "should return OK" do
-    get '/posts'
-    payload = JSON.parse(response.body)
-    expect(payload).to be_empty
-    expect(response).to have_http_status(200)
+
+  def payload
+    JSON.parse(response.body).with_indifferent_access
   end
 end
